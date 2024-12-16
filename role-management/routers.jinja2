@@ -1,0 +1,63 @@
+from __future__ import annotations
+
+from fastapi import APIRouter, FastAPI, HTTPException, UploadFile
+
+from models import *  # Ensure your dependencies are correctly imported
+
+# Dynamically import the service class based on the tag name
+from app.services.{{tag | lower}}_service import {{tag | capitalize}}Service
+
+# Create an instance of the service
+service = {{tag | capitalize}}Service()
+
+router = APIRouter(
+    tags=['{{tag}}']
+)
+{% for operation in operations %}
+{% if operation.tags[0] == tag %}
+@router.{{operation.type}}('{{operation.snake_case_path}}', response_model={{operation.response}}
+    {% if operation.additional_responses %}
+        , responses={
+            {% for status_code, models in operation.additional_responses.items() %}
+                '{{ status_code }}': {
+                {% for key, model in models.items() %}
+                    '{{ key }}': {{ model }}{% if not loop.last %},{% endif %}
+                {% endfor %}
+                }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        }
+    {% endif %}
+    {% if operation.tags %}
+    , tags={{operation.tags}}
+    {% endif %})
+def {{operation.function_name}}({{operation.snake_case_arguments}}) -> {{operation.return_type}}:
+    {%- if operation.summary %}
+    """
+    {{ operation.summary }}
+    
+    """
+    {%- endif %}    
+
+    
+    # Example usage of the service
+    try:
+        
+        {% set args_string = [] %}  {# Initialize as a list #}
+        {% set args = operation.arguments.split(',') %}  {# Assuming you have this list #}
+
+       
+        # Safely process each argument
+        result = service.{{ operation.function_name }}(
+            {% for arg in args %}
+                {% set parts = arg.split(':') %}  {# Split arg into parts (name, type) #}
+                {% if parts|length > 0 and parts[0].strip() %}
+                    {{ parts[0] }} = {{ parts[0] }}{% if not loop.last %}, {% endif %}
+                {% endif %}
+            {% endfor %}
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+{% endif %}
+{% endfor %}

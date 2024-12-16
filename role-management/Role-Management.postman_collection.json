@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "29a33404-bb26-423c-bb9a-1e23859d75e3",
+		"name": "Role-Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39157162",
+		"_collection_link": "https://hexahive-backend.postman.co/workspace/HexaHive-Backend-Workspace~acd7e5d1-1eaa-40c2-9f20-0c1fbeb997cf/collection/39157162-29a33404-bb26-423c-bb9a-1e23859d75e3?action=share&source=collection_link&creator=39157162"
+	},
+	"item": [
+		{
+			"name": "Create Role",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"EMPLOYEE\",\r\n    \"description\":\"EMPLOYEE Role\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{attend-role}}/role",
+					"host": [
+						"{{attend-role}}"
+					],
+					"path": [
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Role",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"ADMIN\",\r\n    \"description\":\"Admin's Role can access for all\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{attend-role}}/role/update/1",
+					"host": [
+						"{{attend-role}}"
+					],
+					"path": [
+						"role",
+						"update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Role By Role-Id Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{attend-role}}/role/get/1",
+					"host": [
+						"{{attend-role}}"
+					],
+					"path": [
+						"role",
+						"get",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Roles Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrdnNic2MwODFAZ21haWwuY29tIiwiZXhwIjoxNzIzNTI0MDg3LCJpYXQiOjE3MjM0Mzc2ODd9.CtdyzBuGAOKCn5MO-2SHr67VghzXI51eMUhTDPPnDl8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{attend-role}}/role/get-all?page=1&size=3&search_key=Admin",
+					"host": [
+						"{{attend-role}}"
+					],
+					"path": [
+						"role",
+						"get-all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						},
+						{
+							"key": "search_key",
+							"value": "Admin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Role Copy",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{attend-role}}/role/delete/1",
+					"host": [
+						"{{attend-role}}"
+					],
+					"path": [
+						"role",
+						"delete",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "attend-role",
+			"value": "localhost:5001/v1/api",
+			"type": "default"
+		}
+	]
+}

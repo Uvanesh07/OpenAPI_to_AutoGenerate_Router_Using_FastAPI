@@ -1,0 +1,314 @@
+openapi: 3.0.3
+info:
+  title: Role Management API
+  description: API for managing roles
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: aravind@monkeeys.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: /users
+  - url: http://localhost:8080/users
+paths:
+  /v1/api/role:
+    post:
+      tags:
+        - Role
+      summary: Create Role
+      operationId: create_role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRole'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBO'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPInternalError'
+
+  /v1/api/role/update/{role_id}:
+    put:
+      tags:
+        - Role
+      summary: Update Role
+      operationId: update_role
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Role Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRole'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBO'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPInternalError'
+
+  /v1/api/role/get/{role_id}:
+    get:
+      tags:
+        - Role
+      summary: Get Role By Id
+      operationId: get_role_by_id
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Role Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBO'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPInternalError'
+
+  /v1/api/role/get-all:
+    get:
+      tags:
+        - Role
+      summary: Get All Roles
+      operationId: get_all_roles
+      parameters:
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: Number of users per page
+            default: 10
+            title: Size
+          description: Number of users per page
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: Page number
+            default: 1
+            title: Page
+          description: Page number
+        - name: search_key
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Search keyword
+            title: Search Key
+          description: Search keyword
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageableResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPInternalError'
+
+  /v1/api/role/delete/{role_id}:
+    delete:
+      tags:
+        - Role
+      summary: Delete Role
+      operationId: delete_role
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Role Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBO'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPInternalError'
+
+
+components:
+  schemas:
+
+    CreateRole:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+            - type: string
+
+          title: Description
+      type: object
+      required:
+        - name
+        - description
+      title: CreateRole
+
+    ResponseBO:
+      properties:
+        code:
+          type: integer
+          title: Code
+        status:
+          type: string
+          title: Status
+        data:
+          anyOf:
+            - {}
+
+          title: Data
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+        - code
+        - status
+        - data
+        - message
+      title: ResponseBO
+
+    PageableResponse:
+      properties:
+        code:
+          type: integer
+          title: Code
+        status:
+          type: string
+          title: Status
+        page:
+          type: integer
+          title: Page
+        size:
+          type: integer
+          title: Size
+        data:
+          anyOf:
+            - {}
+
+          title: Data
+        message:
+          type: string
+          title: Message
+        totalPages:
+          type: integer
+          title: Totalpages
+        totalElements:
+          type: integer
+          title: Totalelements
+      type: object
+      required:
+        - code
+        - status
+        - page
+        - size
+        - data
+        - message
+        - totalPages
+        - totalElements
+      title: PageableResponse
+
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Details about the validation error, e.g., data does not meet the requirements.
+        code:
+          type: integer
+          description: Error code (e.g., 422).
+      required:
+        - detail
+        - code
+
+    HTTPInternalError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Description of the error.
+        code:
+          type: integer
+          description: Error code (e.g., 500).
+      required:
+        - detail
+        - code
